@@ -13,9 +13,12 @@ import java.util.Map;
 public class InMemoryTaskManager implements TaskManager{
     public int newId = 1;
 
-    Map<Integer, Task> taskMap = new HashMap<>();
-    Map<Integer, SubTask> subTasksMap = new HashMap<>();
-    Map<Integer, Epic> epicMap = new HashMap<>();
+    private Map<Integer, Task> taskMap = new HashMap<>();
+    private Map<Integer, SubTask> subTasksMap = new HashMap<>();
+    private Map<Integer, Epic> epicMap = new HashMap<>();
+
+    private HistoryManager historyManager = Managers.getDefaultHistory();
+
 
     @Override
     public List<Task> getAllTask() {
@@ -58,6 +61,8 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public Task getTaskById(int id) {
+
+
         return taskMap.get(id);
     }
 
