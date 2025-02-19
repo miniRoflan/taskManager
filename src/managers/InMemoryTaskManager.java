@@ -10,31 +10,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryTaskManager {
+public class InMemoryTaskManager implements TaskManager{
     public int newId = 1;
 
     Map<Integer, Task> taskMap = new HashMap<>();
     Map<Integer, SubTask> subTasksMap = new HashMap<>();
     Map<Integer, Epic> epicMap = new HashMap<>();
 
-
-    public List<Task> getAllTasks() {
+    @Override
+    public List<Task> getAllTask() {
         return new ArrayList<>(taskMap.values());
     }
 
-    public List<SubTask> getAllSubTasks() {
+    @Override
+    public List<SubTask> getAllSubTask() {
         return new ArrayList<>(subTasksMap.values());
     }
 
+    @Override
     public List<Epic> getAllEpic() {
         return new ArrayList<>(epicMap.values());
     }
 
-    public void deleteAllTasks() {
+    @Override
+    public void deleteAllTask() {
         taskMap.clear();
     }
 
-    public void deleteAllSubTasks() {
+    @Override
+    public void deleteAllSubTask() {
         for (Integer curSubTaskId : subTasksMap.keySet()) {
             int curEpicId = subTasksMap.get(curSubTaskId).epicId;
             epicMap.get(curEpicId).subTasksId.clear();
@@ -43,32 +47,37 @@ public class InMemoryTaskManager {
             updateEpic(curEpicId);
         }
 
-
         subTasksMap.clear();
     }
 
+    @Override
     public void deleteAllEpic() {
         epicMap.clear();
         subTasksMap.clear();
     }
 
-    public Task getTaskFromId(int id) {
+    @Override
+    public Task getTaskById(int id) {
         return taskMap.get(id);
     }
 
-    public SubTask getSubTaskFromId(int id) {
+    @Override
+    public SubTask getSubTaskById(int id) {
         return subTasksMap.get(id);
     }
 
-    public Epic getEpicFromId(int id) {
+    @Override
+    public Epic getEpicById(int id) {
         return epicMap.get(id);
     }
 
-    public void deleteTaskFromId(int id) {
+    @Override
+    public void deleteTaskById(int id) {
         taskMap.remove(id);
     }
 
-    public void deleteSubTaskFromId(int id) {
+    @Override
+    public void deleteSubTaskById(int id) {
         int curEpicId = subTasksMap.get(id).epicId;
         subTasksMap.remove(id);
 
@@ -76,15 +85,21 @@ public class InMemoryTaskManager {
         epicMap.get(curEpicId).doneSubTusksId.remove((Integer) id);
 
         updateEpic(curEpicId);
-        //add updateEpicState method
     }
 
+    @Override
+    public void deleteEpicById(int id) {
+        //add code!!!!
+    }
+
+    @Override
     public void createTask(Task task) {
         task.id = newId;
         taskMap.put(task.id, task);
         newId++;
     }
 
+    @Override
     public void createEpic(Epic epic) {
         epic.id = newId;
         epicMap.put(epic.id, epic);
@@ -92,6 +107,7 @@ public class InMemoryTaskManager {
         newId++;
     }
 
+    @Override
     public void createSubTask(SubTask subTask) {
         subTask.id = newId;
         epicMap.get(subTask.epicId).subTasksId.add(subTask.id);
@@ -99,7 +115,8 @@ public class InMemoryTaskManager {
         newId++;
     }
 
-    public List<SubTask> getAllSubTasksFromEpicId(int id) {
+    @Override
+    public List<SubTask> getSubTasksByEpicId(int id) {
         List<SubTask> result = new ArrayList<>();
 
         for (Integer subTaskId : epicMap.get(id).subTasksId) {
@@ -109,10 +126,12 @@ public class InMemoryTaskManager {
         return result;
     }
 
+    @Override
     public void updateTask(Task upTask, int id) {
         taskMap.put(id , upTask);
     }
 
+    @Override
     public void updateSubTask(SubTask upSubTask, int id) {
         subTasksMap.put(id, upSubTask);
 
@@ -124,7 +143,8 @@ public class InMemoryTaskManager {
         }
     }
 
-    private void updateEpic(int id) {
+    @Override
+    public void updateEpic(int id) {
         if (epicMap.get(id).subTasksId.isEmpty()) {
             for (Integer subId : epicMap.get(id).subTasksId) {
                 if (!subTasksMap.get(subId).state.equals(State.NEW)) {
