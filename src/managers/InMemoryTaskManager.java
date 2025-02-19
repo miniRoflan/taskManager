@@ -89,7 +89,11 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public void deleteEpicById(int id) {
-        //add code!!!!
+        for (int subTaskId : epicMap.get(id).subTasksId) {
+            subTasksMap.remove(subTaskId);
+        }
+
+        epicMap.remove(id);
     }
 
     @Override
@@ -139,7 +143,6 @@ public class InMemoryTaskManager implements TaskManager{
             epicMap.get(upSubTask.epicId).doneSubTusksId.add(id);
 
             updateEpic(upSubTask.epicId);
-            //add method
         }
     }
 
