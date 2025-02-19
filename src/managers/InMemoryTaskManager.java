@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Manager {
+public class InMemoryTaskManager {
     public int newId = 1;
 
     Map<Integer, Task> taskMap = new HashMap<>();
