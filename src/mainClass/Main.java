@@ -2,7 +2,7 @@ package mainClass;
 
 
 import enums.State;
-import manager.Manager;
+import managers.Manager;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
